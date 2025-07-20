@@ -106,6 +106,8 @@ void setup() {
   setup_wifi();
   setup_sensors();
   connectAWS();
+
+  Serial.println(F("[+] Setup completed successfully!"));
 }
 
 void loop() {
