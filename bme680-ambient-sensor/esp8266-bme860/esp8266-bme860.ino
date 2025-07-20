@@ -38,13 +38,10 @@ JsonDocument doc;
 // MQTT settings
 AWSIotClient client;
 // MQTT topic to publish sensor data
-
-
 void setup_aws() {
   Serial.println("[*] Connecting to AWS");
   client.connect();
-
-  Serial.println("AWS IoT Connected!");
+  Serial.println("[+] AWS IoT Connected!");
 }
 
 
@@ -111,7 +108,7 @@ void loop() {
   serializeJson(doc, jsonBuffer, sizeof(jsonBuffer));
   Serial.println(jsonBuffer);
 
-  client.publish_message(AWS_IOT_PUBLISH_TOPIC, jsonBuffer);
-  client.loop();
+  // client.publish_message(AWS_IOT_PUBLISH_TOPIC, jsonBuffer);
+  // client.loop();
   delay(SAMPLE_INTERVAL_MS);
 }

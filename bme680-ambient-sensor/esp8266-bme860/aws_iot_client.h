@@ -10,7 +10,6 @@ private:
 
 public:
   AWSIotClient();
-  AWSIotClient(boolean);
   void loop();
   void connect();
   void publish_message(const char *, const char *);
