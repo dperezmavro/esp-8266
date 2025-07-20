@@ -1,3 +1,6 @@
+#include "./aws_iot_client.h"
+
+
 #ifndef WIFI_SETTINGS_H
 #define WIFI_SETTINGS_H
 #include <ESP8266WiFi.h>
@@ -32,38 +35,17 @@ float dewPont;
 JsonDocument doc;
 #endif  // SENSOR_SETTINGS_H
 
+// MQTT settings
+AWSIotClient client;
 // MQTT topic to publish sensor data
 
-#ifndef MQTT_SETTINGS_H
-#define MQTT_SETTINGS_H
-#include <AwsIotWiFiClient.h>
-#define AWS_IOT_PUBLISH_TOPIC "sensors/pub"
 
-AwsIotWiFiClient awsIotWiFiClient;
-
-BearSSL::X509List trustAnchorCertificate(cacert);
-BearSSL::X509List clientCertificate(client_cert);
-BearSSL::PrivateKey clientPrivateKey(privkey);
-
-void connectAWS() {
+void setup_aws() {
   Serial.println("[*] Connecting to AWS");
-  // Set up AWS IoT Wi-Fi Client:
-  awsIotWiFiClient
-    // Enable debug output:
-    .setDebugOutput(true)
-    // Certificates to establish secure communication (defined above):
-    .setCertificates(&trustAnchorCertificate, &clientCertificate, &clientPrivateKey)
-    // Device Data Endpoint from IoT Core -> Settings:
-    .setEndpoint(MQTT_HOST)
-    // MQTT client ID aka thing name:
-    .setSubscribeTopicFilter("subscribeTopicFilter")
-    .setClientId(THING_NAME)
-    // Connect to the AWS IoT service:
-    .connect();
+  client.connect();
 
   Serial.println("AWS IoT Connected!");
 }
-#endif  // MQTT_SETTINGS_H
 
 
 void setup_sensors() {
@@ -105,7 +87,7 @@ void setup() {
 
   setup_wifi();
   setup_sensors();
-  connectAWS();
+  setup_aws();
 
   Serial.println(F("[+] Setup completed successfully!"));
 }
@@ -129,7 +111,7 @@ void loop() {
   serializeJson(doc, jsonBuffer, sizeof(jsonBuffer));
   Serial.println(jsonBuffer);
 
-  awsIotWiFiClient.publishMessage(AWS_IOT_PUBLISH_TOPIC, jsonBuffer);
-  awsIotWiFiClient.loop();
+  client.publish_message(AWS_IOT_PUBLISH_TOPIC, jsonBuffer);
+  client.loop();
   delay(SAMPLE_INTERVAL_MS);
 }
