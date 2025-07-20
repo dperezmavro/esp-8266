@@ -5,14 +5,14 @@ AWSIotClient::AWSIotClient() {
   BearSSL::X509List clientCertificate(client_cert);
   BearSSL::PrivateKey clientPrivateKey(privkey);
 
-  client.setDebugOutput(false)
+  client.setDebugOutput(true)
     .setCertificates(
       &trustAnchorCertificate,
       &clientCertificate,
       &clientPrivateKey)
     .setEndpoint(MQTT_HOST)
-    .setSubscribeTopicFilter("DUMMY")
-    .setClientId(THING_NAME);
+    .setClientId(THING_NAME)
+    .setSubscribeTopicFilter("DUMMY");
 }
 
 void AWSIotClient::publish_message(const char *topic, const char *contents) {

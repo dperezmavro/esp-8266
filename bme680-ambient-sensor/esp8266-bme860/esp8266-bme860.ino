@@ -36,11 +36,16 @@ JsonDocument doc;
 #endif  // SENSOR_SETTINGS_H
 
 // MQTT settings
-AWSIotClient client;
+AWSIotClient *client;
 // MQTT topic to publish sensor data
+
 void setup_aws() {
   Serial.println("[*] Connecting to AWS");
-  client.connect();
+  
+  client = new AWSIotClient();
+  
+  client->connect();
+  
   Serial.println("[+] AWS IoT Connected!");
 }
 
