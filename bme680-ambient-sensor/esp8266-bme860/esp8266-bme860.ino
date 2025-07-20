@@ -36,38 +36,35 @@ JsonDocument doc;
 
 #ifndef MQTT_SETTINGS_H
 #define MQTT_SETTINGS_H
-#include <PubSubClient.h>
-#include <WiFiClientSecure.h>
+#include <AwsIotWiFiClient.h>
 #define AWS_IOT_PUBLISH_TOPIC "sensors/pub"
 
-BearSSL::X509List cert(cacert);
-BearSSL::X509List client_crt(client_cert);
-BearSSL::PrivateKey key(privkey);
+AwsIotWiFiClient awsIotWiFiClient;
 
-WiFiClientSecure net = WiFiClientSecure();
-PubSubClient client(net);
-#endif  // MQTT_SETTINGS_H
+BearSSL::X509List trustAnchorCertificate(cacert);
+BearSSL::X509List clientCertificate(client_cert);
+BearSSL::PrivateKey clientPrivateKey(privkey);
 
 void connectAWS() {
   Serial.println("[*] Connecting to AWS");
-  net.setTrustAnchors(&cert);
-  net.setClientRSACert(&client_crt, &key);
-  client.setServer(MQTT_HOST, 8883);
-
-  Serial.println("Connecting to AWS IOT");
-
-  while (!client.connect(THING_NAME)) {
-    Serial.print(".");
-    delay(1000);
-  }
-
-  if (!client.connected()) {
-    Serial.println("AWS IoT Timeout!");
-    return;
-  }
+  // Set up AWS IoT Wi-Fi Client:
+  awsIotWiFiClient
+    // Enable debug output:
+    .setDebugOutput(true)
+    // Certificates to establish secure communication (defined above):
+    .setCertificates(&trustAnchorCertificate, &clientCertificate, &clientPrivateKey)
+    // Device Data Endpoint from IoT Core -> Settings:
+    .setEndpoint(MQTT_HOST)
+    // MQTT client ID aka thing name:
+    .setSubscribeTopicFilter("subscribeTopicFilter")
+    .setClientId(THING_NAME)
+    // Connect to the AWS IoT service:
+    .connect();
 
   Serial.println("AWS IoT Connected!");
 }
+#endif  // MQTT_SETTINGS_H
+
 
 void setup_sensors() {
   Serial.println(F("[*] Starting BME sensor setup"));
@@ -118,6 +115,7 @@ void loop() {
   }
 
   doc["sensor"] = "bme680";
+  doc["location"] = "living_room";
   doc["altitude (m)"] = bme.readAltitude(SEALEVELPRESSURE_HPA);
   doc["gas (KOhms)"] = bme.gas_resistance / 1000.0;
   doc["humidity (%)"] = bme.humidity;
@@ -129,7 +127,7 @@ void loop() {
   serializeJson(doc, jsonBuffer, sizeof(jsonBuffer));
   Serial.println(jsonBuffer);
 
-  client.publish(AWS_IOT_PUBLISH_TOPIC, jsonBuffer);
-  client.loop();
+  awsIotWiFiClient.publishMessage(AWS_IOT_PUBLISH_TOPIC, jsonBuffer);
+  awsIotWiFiClient.loop();
   delay(SAMPLE_INTERVAL_MS);
 }
