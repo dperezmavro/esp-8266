@@ -113,7 +113,7 @@ void loop() {
   serializeJson(doc, jsonBuffer, sizeof(jsonBuffer));
   Serial.println(jsonBuffer);
 
-  // client.publish_message(AWS_IOT_PUBLISH_TOPIC, jsonBuffer);
-  // client.loop();
+  client->publish_message(AWS_IOT_PUBLISH_TOPIC, jsonBuffer);
+  client->loop();
   delay(SAMPLE_INTERVAL_MS);
 }

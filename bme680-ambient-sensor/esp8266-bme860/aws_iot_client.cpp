@@ -24,7 +24,5 @@ void AWSIotClient::loop() {
 }
 
 void AWSIotClient::connect() {
-  Serial.printf("number of certificates %d\n", trustAnchorCertificate->getCount());
-  Serial.printf("number of certificates %d\n", clientCertificate->getCount());
   client.connect();
 }
