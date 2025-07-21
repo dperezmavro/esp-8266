@@ -1,15 +1,15 @@
 #include "./aws_iot_client.h"
 
 AWSIotClient::AWSIotClient() {
-  BearSSL::X509List trustAnchorCertificate(cacert);
-  BearSSL::X509List clientCertificate(client_cert);
-  BearSSL::PrivateKey clientPrivateKey(privkey);
+  trustAnchorCertificate = new BearSSL::X509List(cacert);
+  clientCertificate = new BearSSL::X509List(client_cert);
+  clientPrivateKey = new BearSSL::PrivateKey(privkey);
 
   client.setDebugOutput(true)
     .setCertificates(
-      &trustAnchorCertificate,
-      &clientCertificate,
-      &clientPrivateKey)
+      trustAnchorCertificate,
+      clientCertificate,
+      clientPrivateKey)
     .setEndpoint(MQTT_HOST)
     .setClientId(THING_NAME)
     .setSubscribeTopicFilter("DUMMY");
@@ -24,5 +24,7 @@ void AWSIotClient::loop() {
 }
 
 void AWSIotClient::connect() {
+  Serial.printf("number of certificates %d\n", trustAnchorCertificate->getCount());
+  Serial.printf("number of certificates %d\n", clientCertificate->getCount());
   client.connect();
 }

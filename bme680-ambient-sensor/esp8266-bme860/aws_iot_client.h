@@ -7,6 +7,9 @@
 class AWSIotClient {
 private:
   AwsIotWiFiClient client;
+  const BearSSL::X509List *trustAnchorCertificate;
+  const BearSSL::X509List *clientCertificate;
+  const BearSSL::PrivateKey *clientPrivateKey;
 
 public:
   AWSIotClient();
