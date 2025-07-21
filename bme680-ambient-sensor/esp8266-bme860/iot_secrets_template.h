@@ -1,12 +1,8 @@
-#ifndef _SECRETS_H
-#define _SECRETS_H
-
-#include <pgmspace.h>
-
-#define WIFI_SSID ""
-#define WIFI_PASS ""
+#ifndef _IOT_SECRETS_H
+#define _IOT_SECRETS_H
 
 #define THING_NAME ""
+#define AWS_IOT_PUBLISH_TOPIC ""
 
 const char MQTT_HOST[] = "";
 
