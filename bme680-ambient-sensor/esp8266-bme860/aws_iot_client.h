@@ -1,5 +1,5 @@
-#ifndef IOT_H
-#define IOT_H
+#ifndef _IOT_H
+#define _IOT_H
 
 #include <AwsIotWiFiClient.h>
 #include "./iot_secrets.h"

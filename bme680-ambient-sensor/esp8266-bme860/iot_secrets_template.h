@@ -1,5 +1,5 @@
-#ifndef IOT_SECRETS_H
-#define IOT_SECRETS_H
+#ifndef _IOT_SECRETS_H
+#define _IOT_SECRETS_H
 
 #define THING_NAME ""
 #define AWS_IOT_PUBLISH_TOPIC ""

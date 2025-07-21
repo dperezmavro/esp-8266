@@ -1,5 +1,5 @@
-#ifndef SECRETS
-#define SECRETS
+#ifndef _SECRETS_H
+#define _SECRETS_H
 
 #include <pgmspace.h>
 
