@@ -14,11 +14,11 @@ void setup() {
   Serial.println();
   Serial.println(F("ESP8266 + BME680 starting up"));
 
-  if (!bme.setup()) {
+  while (!bme.setup()) {
     Serial.println(F("[-] BME sensor setup failed"));
-    return;
+    delay(1000);
   }
-  
+
   setup_wifi();
   setup_ntp();
 

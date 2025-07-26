@@ -1,7 +1,7 @@
 #ifndef _SENSOR_H
 #define _SENSOR_H
 
-#include <Adafruit_BME680.h>
+#include "Adafruit_BME680.h"
 #include <Adafruit_Sensor.h>
 #include <Wire.h>
 #include <map>
@@ -14,7 +14,7 @@
 
 class BME680 {
  private:
-  Adafruit_BME680* bme;
+  Adafruit_BME680 bme;
 
  public:
   BME680();
