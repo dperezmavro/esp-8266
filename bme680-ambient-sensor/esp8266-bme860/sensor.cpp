@@ -10,7 +10,7 @@ bool BME680::setup() {
   Serial.println(F("[*] Starting BME sensor setup"));
 
   int res = bme->begin();
-  while (!res) {
+  if (!res) {
     Serial.printf(
         "Could not find a valid BME680 sensor (result: %d), check wiring\n",
         res);
