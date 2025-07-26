@@ -10,7 +10,8 @@ void setup_wifi() {
     delay(1500);
     Serial.printf("  last status: %d.\n", WiFi.status());
   }
-  Serial.printf("[+] Connected, IP address: %s\n", WiFi.localIP().toString().c_str());
+  Serial.printf("[+] Connected, IP address: %s\n",
+                WiFi.localIP().toString().c_str());
   Serial.println(F("[+] WiFi setup successful!"));
 }
 

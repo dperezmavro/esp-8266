@@ -12,15 +12,15 @@
 #define SAMPLE_INTERVAL_MS 5000
 #define OUTPUT_BUFFER_SIZE 256
 
-
 class BME680 {
-  private:
-    Adafruit_BME680 *bme;
-  public:
-    BME680();
-    bool setup();
-    const char* get_device_name();
-    std::map<std::string, float> read_values();
+private:
+  Adafruit_BME680 *bme;
+
+public:
+  BME680();
+  bool setup();
+  const char *get_device_name();
+  std::map<std::string, float> read_values();
 };
 
-#endif  // _SENSOR_H
+#endif // _SENSOR_H
