@@ -70,9 +70,6 @@ void setup_wifi() {
 }
 
 void setup_ntp() {
-    // Accurate time is necessary for certificate validation and writing in batches
-  // We use the NTP servers in your area as provided by: https://www.pool.ntp.org/zone/
-  // Syncing progress and the time will be printed to Serial.
   Serial.println(F("[*] Starting NTP setup"));
   timeSync(TZ_INFO, "pool.ntp.org", "time.nis.gov");
   Serial.println(F("[+] NTP setup successful!"));
@@ -90,7 +87,7 @@ void setup() {
   
   setup_wifi();
   setup_ntp();
-  // setup_sensors();
+  setup_sensors();
   
   if (!influx_db.setup()) {
     Serial.println(F("InfluxDB setup failed"));
@@ -101,34 +98,24 @@ void setup() {
 }
 
 void loop() {
-  /*
+  
   if (!bme.performReading()) {
     Serial.println("Failed to perform reading :(");
     delay(1000);
     return;
   }
 
-  doc["sensor"] = "bme680";
-  doc["location"] = "living_room";
-  doc["altitude (m)"] = bme.readAltitude(SEALEVELPRESSURE_HPA);
-  doc["gas (KOhms)"] = bme.gas_resistance / 1000.0;
-  doc["humidity (%)"] = bme.humidity;
-  doc["pressure (hPa)"] = bme.pressure;
-  doc["temperature (*C))"] = bme.temperature;
-
-  char jsonBuffer[OUTPUT_BUFFER_SIZE];
-
-  serializeJson(doc, jsonBuffer, sizeof(jsonBuffer));
-  Serial.println(jsonBuffer);
-*/
 
   std::map<std::string, float> values;
-  values["temperature"] = 30.0;
-  values["humidity"] = 50;
-  values["pressure"] = 1013;
-  values["gas"] = 1000;
-  values["altitude"] = 100;
-  values["dewPoint"] = 10;
+  values["temperature (C)"] = bme.temperature;
+  values["humidity (%)"] = bme.humidity;
+  values["pressure (hPa)"] = bme.pressure;
+  values["gas (KOhms)"] = bme.gas_resistance / 1000.0;
+  values["altitude (m)"] = bme.readAltitude(SEALEVELPRESSURE_HPA);
+
+  // values["location"] = "living_room";
+  // values["sensor_device"] = DEVICE;
+  
 
   influx_db.write_point(values);
   Serial.println("Waiting 1 second");

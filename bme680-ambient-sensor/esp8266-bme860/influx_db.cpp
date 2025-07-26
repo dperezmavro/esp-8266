@@ -21,7 +21,9 @@ bool InfluxDB::setup() {
   return true;
 }
 
-bool InfluxDB::write_point(const std::map<std::string, float>& values) {
+bool InfluxDB::write_point(
+  const std::map<std::string, float>& values
+) {
   // Clear any existing fields
   sensor->clearFields();
   

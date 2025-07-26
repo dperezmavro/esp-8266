@@ -20,7 +20,9 @@ class InfluxDB {
     Point *sensor;
   public:
     InfluxDB(const char* point_name);
-    bool write_point(const std::map<std::string, float>& values);
+    bool write_point(
+        const std::map<std::string, float>& values
+    );
     bool setup();
 };
 
