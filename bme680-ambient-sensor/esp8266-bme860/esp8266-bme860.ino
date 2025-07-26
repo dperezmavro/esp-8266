@@ -1,52 +1,10 @@
 #include "./setup.h"
 #include "./influx_db.h"
-
-// BME680 settings
-#ifndef SENSOR_SETTINGS_H
-#define SENSOR_SETTINGS_H
-
-#include <Adafruit_BME680.h>
-#include <Adafruit_Sensor.h>
-#include <ArduinoJson.h>
-#include <Wire.h>
-
-#define SEALEVELPRESSURE_HPA (1013.25)
-#define SAMPLE_INTERVAL_MS 5000
-#define OUTPUT_BUFFER_SIZE 256
-
-Adafruit_BME680 bme(&Wire);  // I2C
-
-float temperature;
-float humidity;
-float pressure;
-float gasResistance;
-float altitude;
-float dewPont;
-JsonDocument doc;
-#endif  // SENSOR_SETTINGS_H
-
-#define DEVICE "bme680"
-
-InfluxDB influx_db(DEVICE);
+#include "./sensor.h"
 
 
-void setup_sensors() {
-  Serial.println(F("[*] Starting BME sensor setup"));
-
-  while (!bme.begin()) {
-    Serial.println("Could not find a valid BME680 sensor, check wiring!");
-    delay(1500);
-  }
-  // Set up oversampling and filter initialization
-  bme.setTemperatureOversampling(BME680_OS_8X);
-  bme.setHumidityOversampling(BME680_OS_2X);
-  bme.setPressureOversampling(BME680_OS_4X);
-  bme.setIIRFilterSize(BME680_FILTER_SIZE_3);
-  bme.setGasHeater(320, 150);  // 320*C for 150 ms
-
-  Serial.println(F("[+] BME sensor setup successful!"));
-}
-
+BME680 bme;
+InfluxDB influx_db(bme.get_device_name());
 
 void setup() {
   Serial.begin(9600);
@@ -60,10 +18,14 @@ void setup() {
 
   setup_wifi();
   setup_ntp();
-  setup_sensors();
 
   if (!influx_db.setup()) {
-    Serial.println(F("InfluxDB setup failed"));
+    Serial.println(F("[-] InfluxDB setup failed"));
+    return;
+  }
+
+  if (!bme.setup()) {
+    Serial.println(F("[-] BME sensor setup failed"));
     return;
   }
 
@@ -71,26 +33,7 @@ void setup() {
 }
 
 void loop() {
-
-  if (!bme.performReading()) {
-    Serial.println("Failed to perform reading :(");
-    delay(1000);
-    return;
-  }
-
-
-  std::map<std::string, float> values;
-  values["temperature (C)"] = bme.temperature;
-  values["humidity (%)"] = bme.humidity;
-  values["pressure (hPa)"] = bme.pressure;
-  values["gas (KOhms)"] = bme.gas_resistance / 1000.0;
-  values["altitude (m)"] = bme.readAltitude(SEALEVELPRESSURE_HPA);
-
-  // values["location"] = "living_room";
-  // values["sensor_device"] = DEVICE;
-
-
-  influx_db.write_point(values);
+  influx_db.write_point(bme.read_values());
   Serial.println("Waiting 1 second");
 
   delay(SAMPLE_INTERVAL_MS);
