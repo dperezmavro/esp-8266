@@ -14,16 +14,16 @@ void setup() {
   Serial.println();
   Serial.println(F("ESP8266 + BME680 starting up"));
 
+  if (!bme.setup()) {
+    Serial.println(F("[-] BME sensor setup failed"));
+    return;
+  }
+  
   setup_wifi();
   setup_ntp();
 
   if (!influx_db.setup()) {
     Serial.println(F("[-] InfluxDB setup failed"));
-    return;
-  }
-
-  if (!bme.setup()) {
-    Serial.println(F("[-] BME sensor setup failed"));
     return;
   }
 
