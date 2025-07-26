@@ -6,4 +6,4 @@
 #define WIFI_SSID "REPLACEME"
 #define WIFI_PASS "REPLACEME"
 
-#endif // _WIFI_SECRETS_H
+#endif  // _WIFI_SECRETS_H

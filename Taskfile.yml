@@ -1,0 +1,9 @@
+version: '3'
+tasks:
+  default:
+    cmds:
+      - task --list-all
+
+  fmt:
+    cmds:
+      - clang-format -i bme680-ambient-sensor/esp8266-bme860/*.cpp bme680-ambient-sensor/esp8266-bme860/*.h

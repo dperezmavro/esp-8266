@@ -6,7 +6,6 @@
 
 const char MQTT_HOST[] = "";
 
-
 // Amazon Root CA 1
 static const char cacert[] PROGMEM = R"EOF(
 -----BEGIN CERTIFICATE-----
@@ -20,7 +19,6 @@ static const char client_cert[] PROGMEM = R"KEY(
 -----END CERTIFICATE-----
 
 )KEY";
-
 
 // Copy contents from  XXXXXXXX-private.pem.key here ▼
 static const char privkey[] PROGMEM = R"KEY(

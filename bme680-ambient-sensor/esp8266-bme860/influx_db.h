@@ -14,13 +14,13 @@
 #define TZ_INFO "UTC0"
 
 class InfluxDB {
-private:
-  InfluxDBClient *influx_client;
-  Point *sensor;
+ private:
+  InfluxDBClient* influx_client;
+  Point* sensor;
 
-public:
-  InfluxDB(const char *point_name);
-  bool write_point(const std::map<std::string, float> &values);
+ public:
+  InfluxDB(const char* point_name);
+  bool write_point(const std::map<std::string, float>& values);
   bool setup();
 };
 
