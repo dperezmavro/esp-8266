@@ -1,11 +1,11 @@
 #ifndef _SENSOR_H
 #define _SENSOR_H
 
-#include <Adafruit_BME680.h>
 #include <Adafruit_Sensor.h>
 #include <Wire.h>
 #include <map>
 #include <string>
+#include "Adafruit_BME680.h"
 
 #define DEVICE "bme680"
 #define SEALEVELPRESSURE_HPA (1013.25)

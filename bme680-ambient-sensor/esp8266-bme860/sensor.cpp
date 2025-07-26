@@ -1,14 +1,24 @@
 #include "./sensor.h"
 
+#define BME680_DEBUG
+
+#define BME680_I2C_ADDRESS 0x77
+#define I2C_SDA 12
+#define I2C_SCL 14
+
 BME680::BME680() {
-  this->bme = new Adafruit_BME680();
+  Wire.begin(I2C_SDA, I2C_SCL);
+  this->bme = new Adafruit_BME680(&Wire);
 }
 
 bool BME680::setup() {
   Serial.println(F("[*] Starting BME sensor setup"));
 
-  while (!bme->begin()) {
-    Serial.println("Could not find a valid BME680 sensor, check wiring!");
+  int res = bme->begin(BME680_I2C_ADDRESS);
+  if (!res) {
+    Serial.printf(
+        "Could not find a valid BME680 sensor (result: %d), check wiring\n",
+        res);
     return false;
   }
   // Set up oversampling and filter initialization
@@ -37,11 +47,11 @@ std::map<std::string, float> BME680::read_values() {
   // values["location"] = "living_room";
   // values["sensor_device"] = DEVICE;
 
-  values["temperature (C)"] = bme->temperature;
-  values["humidity (%)"] = bme->humidity;
-  values["pressure (hPa)"] = bme->pressure;
-  values["gas (KOhms)"] = bme->gas_resistance / 1000.0;
-  values["altitude (m)"] = bme->readAltitude(SEALEVELPRESSURE_HPA);
+  values["temperature"] = bme->temperature;
+  values["humidity"] = bme->humidity;
+  values["pressure"] = bme->pressure;
+  values["gas"] = bme->gas_resistance / 1000.0;
+  values["altitude"] = bme->readAltitude(SEALEVELPRESSURE_HPA);
 
   return values;
 }
