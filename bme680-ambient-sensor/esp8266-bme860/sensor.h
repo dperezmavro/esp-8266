@@ -3,22 +3,14 @@
 
 #include <Adafruit_BME680.h>
 #include <Adafruit_Sensor.h>
-#include <ArduinoJson.h>
 #include <Wire.h>
+#include <map>
+#include <string>
 
 #define DEVICE "bme680"
-
-
 #define SEALEVELPRESSURE_HPA (1013.25)
 #define SAMPLE_INTERVAL_MS 5000
 #define OUTPUT_BUFFER_SIZE 256
-
-
-float temperature;
-float humidity;
-float pressure;
-float gasResistance;
-float altitude;
 
 
 class BME680 {

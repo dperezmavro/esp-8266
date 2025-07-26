@@ -27,22 +27,22 @@ const char* BME680::get_device_name() {
 }
 
 std::map<std::string, float> BME680::read_values() {
-
+  std::map<std::string, float> values;
   if (!bme->performReading()) {
     Serial.println("Failed to perform reading ");
     delay(1000);
-    return;
+    return values;
   }
 
   // values["location"] = "living_room";
   // values["sensor_device"] = DEVICE;
 
 
-  std::map<std::string, float> values;
   values["temperature (C)"] = bme->temperature;
   values["humidity (%)"] = bme->humidity;
   values["pressure (hPa)"] = bme->pressure;
   values["gas (KOhms)"] = bme->gas_resistance / 1000.0;
   values["altitude (m)"] = bme->readAltitude(SEALEVELPRESSURE_HPA);
+  
   return values;
 }
