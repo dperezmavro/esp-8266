@@ -1,13 +1,12 @@
 #ifndef _INFLUX_DB_H
 #define _INFLUX_DB_H
 
-
 #include <InfluxDbClient.h>
 #include <InfluxDbCloud.h>
 #include <map>
 #include <string>
 
-#include "influx_db_secrets.h"
+#include "./influx_db_secrets.h"
 
 #define INFLUXDB_BUCKET "bme680_sensor"
 
@@ -16,14 +15,13 @@
 
 class InfluxDB {
 private:
-  InfluxDBClient* influx_client;
-  Point* sensor;
+  InfluxDBClient *influx_client;
+  Point *sensor;
+
 public:
-  InfluxDB(const char* point_name);
-  bool write_point(
-    const std::map<std::string, float>& values);
+  InfluxDB(const char *point_name);
+  bool write_point(const std::map<std::string, float> &values);
   bool setup();
 };
-
 
 #endif

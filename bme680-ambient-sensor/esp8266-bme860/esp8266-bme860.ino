@@ -1,7 +1,6 @@
-#include "./setup.h"
 #include "./influx_db.h"
 #include "./sensor.h"
-
+#include "./setup.h"
 
 BME680 bme;
 InfluxDB influx_db(bme.get_device_name());
@@ -14,7 +13,6 @@ void setup() {
 
   Serial.println();
   Serial.println(F("ESP8266 + BME680 starting up"));
-
 
   setup_wifi();
   setup_ntp();

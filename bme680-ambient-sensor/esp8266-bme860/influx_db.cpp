@@ -1,12 +1,9 @@
-#include "influx_db.h"
+#include "./influx_db.h"
 
-InfluxDB::InfluxDB(const char* point_name) {
-  this->influx_client = new InfluxDBClient(
-    INFLUXDB_URL,
-    INFLUXDB_ORG,
-    INFLUXDB_BUCKET,
-    INFLUXDB_TOKEN,
-    InfluxDbCloud2CACert);
+InfluxDB::InfluxDB(const char *point_name) {
+  this->influx_client =
+      new InfluxDBClient(INFLUXDB_URL, INFLUXDB_ORG, INFLUXDB_BUCKET,
+                         INFLUXDB_TOKEN, InfluxDbCloud2CACert);
   this->sensor = new Point(point_name);
 }
 
@@ -21,13 +18,12 @@ bool InfluxDB::setup() {
   return true;
 }
 
-bool InfluxDB::write_point(
-  const std::map<std::string, float>& values) {
+bool InfluxDB::write_point(const std::map<std::string, float> &values) {
   // Clear any existing fields
   sensor->clearFields();
 
   // Add all values from the hashset as fields
-  for (const auto& pair : values) {
+  for (const auto &pair : values) {
     sensor->addField(pair.first.c_str(), pair.second);
   }
 

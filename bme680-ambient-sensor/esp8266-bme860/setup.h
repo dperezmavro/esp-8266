@@ -4,7 +4,6 @@
 #include "./influx_db.h"
 #include <time.h>
 
-
 void setup_wifi();
 
 void setup_ntp();
