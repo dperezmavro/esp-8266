@@ -3,12 +3,15 @@
 #define BME680_DEBUG
 
 #define BME680_I2C_ADDRESS 0x77
-#define I2C_SDA 12
-#define I2C_SCL 14
+#define I2C_SDA 12  // D6
+#define I2C_SCL 14  // D5
 
-BME680::BME680() {
+BME680::BME680(std::string location) {
   Wire.begin(I2C_SDA, I2C_SCL);
   this->bme = new Adafruit_BME680(&Wire);
+
+  tags["location"] = location;
+  tags["sensor_device"] = DEVICE;
 }
 
 bool BME680::setup() {
@@ -37,21 +40,22 @@ const char* BME680::get_device_name() {
 }
 
 std::map<std::string, float> BME680::read_values() {
-  std::map<std::string, float> values;
+  std::map<std::string, float> sensor_readings;
   if (!bme->performReading()) {
     Serial.println("Failed to perform reading ");
     delay(1000);
-    return values;
+    return sensor_readings;
   }
 
-  // values["location"] = "living_room";
-  // values["sensor_device"] = DEVICE;
+  sensor_readings["temperature"] = bme->temperature;
+  sensor_readings["humidity"] = bme->humidity;
+  sensor_readings["pressure"] = bme->pressure;
+  sensor_readings["gas"] = bme->gas_resistance / 1000.0;
+  sensor_readings["altitude"] = bme->readAltitude(SEALEVELPRESSURE_HPA);
 
-  values["temperature"] = bme->temperature;
-  values["humidity"] = bme->humidity;
-  values["pressure"] = bme->pressure;
-  values["gas"] = bme->gas_resistance / 1000.0;
-  values["altitude"] = bme->readAltitude(SEALEVELPRESSURE_HPA);
+  return sensor_readings;
+}
 
-  return values;
+std::map<std::string, std::string> BME680::read_tags() {
+  return tags;
 }

@@ -16,11 +16,12 @@
 class InfluxDB {
  private:
   InfluxDBClient* influx_client;
-  Point* sensor;
+  Point* point;
 
  public:
   InfluxDB(const char* point_name);
-  bool write_point(const std::map<std::string, float>& values);
+  bool write_point(const std::map<std::string, std::string>& tags,
+                   const std::map<std::string, float>& values);
   bool setup();
 };
 

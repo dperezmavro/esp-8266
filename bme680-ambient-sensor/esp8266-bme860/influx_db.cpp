@@ -4,7 +4,7 @@ InfluxDB::InfluxDB(const char* point_name) {
   this->influx_client =
       new InfluxDBClient(INFLUXDB_URL, INFLUXDB_ORG, INFLUXDB_BUCKET,
                          INFLUXDB_TOKEN, InfluxDbCloud2CACert);
-  this->sensor = new Point(point_name);
+  this->point = new Point(point_name);
 }
 
 bool InfluxDB::setup() {
@@ -18,17 +18,22 @@ bool InfluxDB::setup() {
   return true;
 }
 
-bool InfluxDB::write_point(const std::map<std::string, float>& values) {
+bool InfluxDB::write_point(const std::map<std::string, std::string>& tags,
+                           const std::map<std::string, float>& values) {
   // Clear any existing fields
-  sensor->clearFields();
+  point->clearFields();
 
   // Add all values from the hashset as fields
   for (const auto& pair : values) {
-    sensor->addField(pair.first.c_str(), pair.second);
+    point->addField(pair.first.c_str(), pair.second);
+  }
+
+  for (const auto& pair : tags) {
+    point->addField(pair.first.c_str(), pair.second.c_str());
   }
 
   // Write the point to InfluxDB
-  if (!influx_client->writePoint(*sensor)) {
+  if (!influx_client->writePoint(*point)) {
     Serial.print("InfluxDB write failed: ");
     Serial.println(influx_client->getLastErrorMessage());
     return false;

@@ -2,7 +2,7 @@
 #include "./sensor.h"
 #include "./setup.h"
 
-BME680 bme;
+BME680 bme("studio");
 InfluxDB influx_db(bme.get_device_name());
 
 void setup() {
@@ -31,7 +31,7 @@ void setup() {
 }
 
 void loop() {
-  influx_db.write_point(bme.read_values());
+  influx_db.write_point(bme.read_tags(), bme.read_values());
   Serial.println("Waiting 1 second");
 
   delay(SAMPLE_INTERVAL_MS);
