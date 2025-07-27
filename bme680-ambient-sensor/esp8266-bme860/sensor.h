@@ -9,8 +9,6 @@
 
 #define DEVICE "bme680"
 #define SEALEVELPRESSURE_HPA (1013.25)
-#define SAMPLE_INTERVAL_MS 5000
-#define OUTPUT_BUFFER_SIZE 256
 
 class BME680 {
  private:
