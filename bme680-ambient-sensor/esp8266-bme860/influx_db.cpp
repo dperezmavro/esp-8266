@@ -28,9 +28,10 @@ bool InfluxDB::write_point(const std::map<std::string, std::string>& tags,
     point->addField(pair.first.c_str(), pair.second);
   }
 
-  for (const auto& pair : tags) {
-    point->addField(pair.first.c_str(), pair.second.c_str());
-  }
+  // TODO(dio): this is buggy
+  // for (const auto& pair : tags) {
+  //   point->addField(pair.first.c_str(), pair.second.c_str());
+  // }
 
   // Write the point to InfluxDB
   if (!influx_client->writePoint(*point)) {
