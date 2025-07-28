@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3'
 
 services:
   influxdb:
@@ -24,6 +24,7 @@ services:
     image: grafana/grafana:10.2.0
     container_name: grafana
     restart: unless-stopped
+    user: "$UID:$GID"
     ports:
       - "3000:3000"
     environment:
@@ -31,8 +32,8 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
     volumes:
-      - ./grafana_data:/var/lib/grafana
-      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana-storage:/var/lib/grafana/
+      - ./grafana/provisioning:/etc/grafana/provisioning/
     networks:
       - monitoring
     depends_on:
