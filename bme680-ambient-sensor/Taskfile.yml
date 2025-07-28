@@ -1,0 +1,10 @@
+version: '3'
+tasks:
+  default:
+    cmds:
+      - task --list-all
+
+  fmt:
+    cmds:
+      - clang-format --style=file -i *.h *.cpp *.ino
+    dir: esp8266-bme860
