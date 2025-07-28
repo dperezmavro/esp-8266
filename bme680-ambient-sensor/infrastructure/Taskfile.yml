@@ -1,0 +1,20 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+  default:
+    cmds:
+      - task --list-all
+
+  up:
+    cmds:
+      - docker compose up
+
+  down:
+    cmds:
+      - docker compose down
+
+  logs:
+    cmds:
+      - docker compose logs --tail=100 influxdb grafana
