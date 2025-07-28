@@ -35,6 +35,6 @@ void scan_i2c() {
   }
   else {
     Serial.println("done\n");
-  } 
+  }
 }
   */

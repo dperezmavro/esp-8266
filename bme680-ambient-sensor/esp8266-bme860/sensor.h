@@ -3,14 +3,17 @@
 
 #include <Adafruit_Sensor.h>
 #include <Wire.h>
+
 #include <map>
 #include <string>
+
 #include "Adafruit_BME680.h"
 
 #define DEVICE "bme680"
 #define SEALEVELPRESSURE_HPA (1013.25)
 
-class BME680 {
+class BME680
+{
  private:
   Adafruit_BME680* bme;
   std::map<std::string, std::string> tags;

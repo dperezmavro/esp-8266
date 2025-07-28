@@ -3,6 +3,7 @@
 
 #include <InfluxDbClient.h>
 #include <InfluxDbCloud.h>
+
 #include <map>
 #include <string>
 
@@ -13,7 +14,8 @@
 // Time zone info
 #define TZ_INFO "UTC0"
 
-class InfluxDB {
+class InfluxDB
+{
  private:
   InfluxDBClient* influx_client;
   Point* point;
